@@ -1,0 +1,174 @@
+:root {
+  --bg: #f2f1ee;
+  --surface: #ffffff;
+  --line: #e2e0db;
+  --text: #161616;
+  --muted: #7a7873;
+  --primary: #161616;
+  --danger: #c2321f;
+  --ok: #2f7d3b;
+  --warn: #b96a00;
+  --radius: 8px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.4 "Avenir Next", "Avenir", "Helvetica Neue", sans-serif;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+
+/* Vorschau-Spalte genau so breit, dass die ganze A4-Seite in Fensterhöhe passt. */
+.app {
+  --preview-w: clamp(300px, calc((100vh - 92px) * .7071 + 44px), 46vw);
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr) var(--preview-w);
+  grid-template-rows: 100vh;
+  height: 100vh;
+  overflow: hidden;
+}
+.app > * { min-height: 0; min-width: 0; }
+
+/* Sidebar */
+.sidebar { background: #161616; color: #f2f1ee; padding: 22px 16px; display: flex; flex-direction: column; gap: 10px; overflow: auto; }
+.brand { font-family: "Arial Narrow", sans-serif; font-weight: 700; font-size: 34px; line-height: .9; text-transform: uppercase; letter-spacing: -.01em; margin-bottom: 18px; }
+.side-label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #8f8d88; font-weight: 600; }
+.artist-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.artist-list button { width: 100%; text-align: left; background: none; border: 0; padding: 8px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 9px; }
+.artist-list button:hover { background: #262626; }
+.artist-list button.active { background: #f2f1ee; color: #161616; }
+.artist-list .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.side-menu { margin-top: auto; padding-top: 16px; }
+.side-menu summary { list-style: none; display: flex; justify-content: space-between; align-items: center; user-select: none; }
+.side-menu summary::-webkit-details-marker { display: none; }
+.side-menu summary::after { content: "▾"; font-size: 12px; transition: transform .15s; }
+.side-menu[open] summary::after { transform: rotate(180deg); }
+.side-menu-items { display: flex; flex-direction: column; gap: 2px; margin-top: 6px; }
+.side-menu-items > * { background: none; border: 0; color: #f2f1ee; text-align: left; padding: 8px 10px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+.side-menu-items > *:hover { background: #262626; }
+
+/* Buttons */
+.btn { border: 1px solid var(--line); background: var(--surface); padding: 8px 14px; border-radius: var(--radius); cursor: pointer; font-weight: 600; }
+.btn:hover { border-color: #c9c6bf; }
+.btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+.btn-primary:hover { background: #000; }
+.btn-ghost { background: transparent; border-color: #3a3a3a; color: inherit; }
+.editor .btn-ghost { border-color: var(--line); }
+.btn-danger { color: var(--danger); margin-top: 18px; }
+.btn-small { padding: 6px 10px; font-size: 13px; }
+.link-btn { background: none; border: 0; padding: 0; cursor: pointer; font-size: 12px; color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+
+/* Editor */
+.editor { background: var(--surface); border-right: 1px solid var(--line); overflow-y: auto; overflow-x: hidden; padding: 20px 22px 60px; }
+#editor-content, .empty { max-width: 620px; margin-left: auto; margin-right: auto; }
+.empty { padding: 60px 10px; color: var(--muted); }
+.empty h2 { color: var(--text); margin: 0 0 6px; }
+.tabs { display: flex; gap: 4px; background: var(--bg); padding: 4px; border-radius: 10px; margin-bottom: 20px; }
+.tab { flex: 1; border: 0; background: none; padding: 8px; border-radius: 7px; cursor: pointer; font-weight: 600; color: var(--muted); }
+.tab.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+
+.field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; min-width: 0; }
+.field > label, .sub { font-size: 12px; font-weight: 600; color: #4a4844; }
+.sub { display: block; margin: 6px 0 6px; }
+.hint { font-weight: 400; color: var(--muted); font-size: 12px; }
+p.hint { margin: -6px 0 14px; }
+input[type=text], input[type=date], select, textarea {
+  width: 100%; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 10px; background: #fff;
+}
+input:focus, select:focus, textarea:focus { outline: 2px solid #161616; outline-offset: -1px; }
+textarea { resize: vertical; line-height: 1.45; }
+input[type=color] { width: 100%; height: 38px; border: 1px solid var(--line); border-radius: var(--radius); padding: 3px; background: #fff; cursor: pointer; }
+input[type=range] { width: 100%; accent-color: #161616; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+input, select, textarea { min-width: 0; max-width: 100%; }
+fieldset { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px 2px; margin: 0 0 16px; }
+legend { font-weight: 700; font-size: 13px; padding: 0 6px; }
+.checks { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-bottom: 14px; font-size: 13px; }
+.checks label { display: flex; gap: 6px; align-items: center; cursor: pointer; }
+.count { font-weight: 600; margin-left: 6px; }
+.count.ok { color: var(--ok); }
+.count.warn { color: var(--warn); }
+
+.fieldset-btn { margin: 0 0 12px; }
+.kit-bar { display: flex; gap: 6px; margin-bottom: 16px; }
+.kit-bar select { flex: 1; font-weight: 600; }
+
+.seg { display: flex; gap: 6px; }
+.seg button { flex: 1 1 0; min-width: 0; font-size: 13px; border: 1px solid var(--line); background: #fff; border-radius: var(--radius); padding: 8px 6px 7px; cursor: pointer; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.seg button.active { border-color: #161616; box-shadow: inset 0 0 0 1px #161616; }
+.seg svg { width: 30px; height: 40px; }
+
+.drop { border: 1.5px dashed #c9c6bf; border-radius: 10px; padding: 18px; text-align: center; color: var(--muted); cursor: pointer; font-size: 13px; }
+.drop.over { border-color: #161616; background: var(--bg); color: var(--text); }
+.thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 8px; margin-top: 4px; }
+.thumbs:empty::after { content: "Noch keine Bilder – im Tab „Artist“ hinzufügen."; grid-column: 1 / -1; font-size: 12px; color: var(--muted); }
+#pool.thumbs:empty::after { content: ""; }
+.thumb { position: relative; aspect-ratio: 1; border-radius: 6px; overflow: hidden; background: var(--bg); border: 0; padding: 0; cursor: pointer; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.thumb .x { position: absolute; top: 4px; right: 4px; width: 20px; height: 20px; border-radius: 50%; background: rgba(0,0,0,.7); color: #fff; border: 0; font-size: 13px; line-height: 20px; cursor: pointer; padding: 0; }
+.thumbs-pick .thumb { outline: 2px solid transparent; outline-offset: -2px; }
+.thumbs-pick .thumb.sel { outline: 3px solid #161616; outline-offset: -3px; }
+.thumb-none { font-size: 11px; font-weight: 600; color: var(--muted); line-height: 1.2; border: 1px dashed #c9c6bf; }
+.thumb .badge { position: absolute; left: 4px; bottom: 4px; background: #161616; color: #fff; font-size: 10px; font-weight: 700; border-radius: 4px; padding: 1px 5px; }
+.thumbs-pick { margin-bottom: 10px; }
+.crop-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.crop-row select { flex: 1; }
+.crop-thumb { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; flex: none; background: var(--bg); }
+.crop-thumb:not([src]) { visibility: hidden; }
+/* Markiert in der Vorschau das Foto, dessen Ausschnitt gerade bearbeitet wird (nicht im PDF). */
+#page img.is-cropping { outline: 4px solid #3b82f6; outline-offset: -4px; }
+
+/* Schriften-Dialog */
+.dialog { border: 0; border-radius: 14px; padding: 22px; width: min(460px, calc(100vw - 32px)); box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+.dialog::backdrop { background: rgba(0,0,0,.35); }
+.dialog h3 { margin: 0 0 6px; }
+.dialog p.hint { margin: 0 0 14px; }
+.font-list { list-style: none; padding: 0; margin: 14px 0 0; display: flex; flex-direction: column; gap: 6px; }
+.font-list li { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 10px; }
+.font-list .sample { flex: 1; font-size: 22px; line-height: 1.1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.font-list .name { font-size: 11px; color: var(--muted); display: block; font-family: "Avenir Next", sans-serif; }
+.font-list li.empty { color: var(--muted); font-size: 13px; justify-content: center; }
+.dialog-wide { width: min(620px, calc(100vw - 32px)); }
+.mail-preview { white-space: pre-wrap; font-size: 12px; line-height: 1.45; background: var(--bg); border-radius: var(--radius); padding: 10px 12px; max-height: 260px; overflow: auto; color: #3a3935; }
+.mail-preview b { color: var(--text); }
+.dialog-foot { display: flex; justify-content: flex-end; margin-top: 16px; }
+
+/* Preview */
+.preview { display: flex; flex-direction: column; overflow: hidden; }
+.preview-bar { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 8px 10px; padding: 14px 22px; min-height: 64px; }
+.status { flex: 1 1 160px; text-align: right; line-height: 1.3; }
+.preview-bar .btn { white-space: nowrap; }
+.status { font-size: 12px; color: var(--muted); }
+.stage { flex: 1; min-height: 0; overflow: hidden; display: flex; align-items: flex-start; justify-content: center; padding: 6px 22px 22px; }
+.scaler { flex: none; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,.14), 0 1px 3px rgba(0,0,0,.1); }
+#page { transform-origin: top left; }
+
+/* Schmale Fenster: alles untereinander */
+@media screen and (max-width: 1180px) {
+  .app { grid-template-columns: 170px minmax(0, 1fr) var(--preview-w); }
+  .sidebar { padding: 18px 12px; }
+  .brand { font-size: 28px; }
+}
+@media screen and (max-width: 900px) {
+  .app { grid-template-columns: 1fr; grid-template-rows: none; height: auto; overflow: visible; }
+  .sidebar { padding: 16px; }
+  .brand { margin-bottom: 6px; }
+  .side-menu { margin-top: 6px; }
+  .editor { border-right: 0; overflow: visible; }
+  .stage { height: 80vh; }
+  .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .editor { overflow-x: hidden; }
+}
+
+/* ---------- Druck / PDF ---------- */
+@page { size: A4; margin: 0; }
+@media print {
+  html, body { background: none; width: 210mm; height: 297mm; overflow: hidden; }
+  .sidebar, .editor, .preview-bar, dialog { display: none !important; }
+  .app, .preview { display: block; width: 210mm; height: 297mm; overflow: hidden; }
+  .stage { padding: 0; overflow: visible; display: block; width: 210mm; }
+  .scaler { box-shadow: none; width: auto !important; height: auto !important; overflow: visible; }
+  #page { transform: none !important; break-after: avoid; page-break-after: avoid; }
+}

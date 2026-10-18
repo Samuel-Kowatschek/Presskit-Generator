@@ -1,0 +1,208 @@
+/* ---------- A4-Seite ---------- */
+.page {
+  --accent: #ff4d00;
+  --on-accent: #141414;
+  --panel: #efece6;
+  --ink: #141414;
+  --title-font: "Arial Narrow", sans-serif;
+  --shade: .7;
+  --body-font: "Avenir Next", "Avenir", sans-serif;
+  position: relative;
+  box-sizing: border-box; /* Innenabstände (Galerie) dürfen die A4-Größe nicht vergrößern */
+  width: 210mm;
+  height: 297mm;
+  overflow: hidden;
+  background: #1a1a1a;
+  color: #fff;
+  font-family: var(--body-font);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.page * { box-sizing: border-box; }
+.page a { color: inherit; text-decoration: none; }
+
+.k-main { width: 100%; height: 100%; object-fit: cover; display: block; }
+.is-gray .k-main { filter: grayscale(1) contrast(1.06); }
+.k-img-empty { background: repeating-linear-gradient(135deg, #3a3a3a 0 8px, #444 8px 16px); }
+
+/* Meta-Zeile */
+.k-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 6.6pt;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+/* Titel */
+.k-title {
+  margin: 0;
+  font-family: var(--title-font);
+  font-weight: 700;
+  line-height: .8;
+  letter-spacing: -.012em;
+  color: var(--accent);
+  position: relative;
+  z-index: 2;
+}
+.font-avenir .k-title { letter-spacing: -.055em; line-height: .78; }
+.font-custom .k-title { letter-spacing: -.02em; line-height: .85; }
+.is-upper .k-title { text-transform: uppercase; }
+.k-title-line { display: block; white-space: nowrap; width: max-content; }
+
+/* Pressetext */
+.k-release {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4mm;
+  font-size: 11pt;
+  font-weight: 700;
+  margin-bottom: 1.6mm;
+}
+.k-release b { font-weight: 800; }
+.k-release-date { font-style: italic; white-space: nowrap; }
+.k-producer {
+  font-size: 6.6pt;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin: -0.4mm 0 2mm;
+  opacity: .8;
+}
+.k-text { font-size: 8.7pt; line-height: 1.44; text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+.k-text p { margin: 0 0 2mm; }
+.k-text p:last-child { margin-bottom: 0; }
+.k-text strong { font-weight: 700; }
+
+/* Link-Index */
+.k-links { display: flex; flex-direction: column; align-self: end; }
+.k-link {
+  display: grid;
+  grid-template-columns: 8mm 1fr auto;
+  align-items: baseline;
+  padding: 1.5mm 0 1.3mm;
+  border-top: .35mm solid var(--accent);
+}
+.k-link:last-child { border-bottom: .35mm solid var(--accent); }
+.k-link-no { font-size: 6.4pt; font-weight: 600; letter-spacing: .05em; color: var(--accent); }
+.k-link-label {
+  font-family: var(--title-font);
+  font-weight: 700;
+  font-size: 19pt;
+  line-height: 1;
+  letter-spacing: -.01em;
+}
+.font-avenir .k-link-label { letter-spacing: -.04em; }
+.k-link-arrow {
+  width: 5.2mm; height: 5.2mm; border-radius: 50%;
+  display: grid; place-items: center; align-self: center;
+  background: var(--accent); color: var(--on-accent);
+  font-size: 8.5pt; font-weight: 700; line-height: 1;
+}
+
+.k-body { display: grid; grid-template-columns: 1fr 56mm; gap: 9mm; align-items: end; }
+
+/* Cover mit versetzten Rahmen */
+.k-cover { position: absolute; width: 44mm; height: 44mm; z-index: 2; }
+.k-cover > * { position: absolute; inset: 0; width: 100%; height: 100%; }
+.k-cover span { border: .35mm solid var(--accent); }
+.k-cover span:nth-child(1) { transform: translate(-5mm, -5mm); }
+.k-cover span:nth-child(2) { transform: translate(-2.5mm, -2.5mm); background: var(--accent); }
+.k-cover-img { overflow: hidden; }
+.k-fill { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Sticker */
+.k-sticker { position: absolute; width: 31mm; z-index: 3; }
+.k-sticker svg { display: block; width: 100%; overflow: visible; }
+.k-sticker .s-bg { fill: var(--accent); }
+.k-sticker .s-line { fill: none; stroke: var(--on-accent); stroke-width: .5; opacity: .6; }
+.k-sticker text { fill: var(--on-accent); text-anchor: middle; }
+.k-sticker .s-ring { font-size: 8.2px; font-weight: 700; letter-spacing: .06em; text-anchor: start; }
+.k-sticker .s-big { font-family: var(--title-font); font-weight: 700; font-size: 16px; }
+.k-sticker .s-small { font-size: 7px; font-weight: 600; letter-spacing: .1em; }
+
+/* ---------- Layout: Vollbild ---------- */
+.layout-vollbild .k-bg { position: absolute; inset: 0; overflow: hidden; }
+.layout-vollbild .k-shade {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom,
+    rgba(0,0,0,calc(var(--shade) * .45)) 0%,
+    rgba(0,0,0,0) 26%,
+    rgba(0,0,0,0) 46%,
+    rgba(0,0,0,calc(var(--shade) * .8)) 76%,
+    rgba(0,0,0,calc(var(--shade) * .92)) 100%);
+}
+.layout-vollbild .k-meta { position: absolute; top: 8mm; left: 11mm; right: 11mm; z-index: 2; }
+.layout-vollbild .k-head { position: absolute; top: 14mm; left: 9mm; right: 9mm; }
+.layout-vollbild.title-plain .k-title { color: #fff; }
+.layout-vollbild .k-sticker { right: 3mm; bottom: -27mm; transform: rotate(-14deg); }
+.layout-vollbild .k-link-label { color: #fff; }
+.layout-vollbild .k-body { position: absolute; left: 11mm; right: 11mm; bottom: 11mm; z-index: 2; }
+.layout-vollbild .k-cover { right: 14mm; top: 112mm; }
+
+/* ---------- Layout: Panel ---------- */
+.layout-panel .k-bg { position: absolute; inset: 0; overflow: hidden; }
+.layout-panel .k-panel {
+  position: absolute; inset: 13mm;
+  background: var(--panel);
+  color: var(--ink);
+  padding: 7mm 9mm 9mm;
+  display: flex; flex-direction: column;
+}
+.layout-panel.title-plain .k-title { color: var(--ink); }
+.layout-panel .k-head {
+  position: relative; flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  margin: 4mm 0 6mm;
+}
+.layout-panel .k-title { text-align: center; }
+.layout-panel .k-title-line { margin: 0 auto; }
+.layout-panel .k-float { position: absolute; overflow: hidden; }
+.layout-panel .k-float-1 { width: 32mm; height: 32mm; left: 4mm; top: 14mm; z-index: 1; }
+.layout-panel .k-float-2 { width: 28mm; height: 36mm; right: 12mm; top: 6mm; z-index: 3; }
+.layout-panel .k-float-3 { width: 30mm; height: 30mm; left: 34mm; bottom: 12mm; z-index: 3; }
+.layout-panel .k-sticker { right: 0; bottom: 0; transform: rotate(10deg); }
+.layout-panel .k-cover { width: 40mm; height: 40mm; right: 4mm; bottom: 6mm; z-index: 1; }
+.layout-panel.has-cover .k-sticker { right: 32mm; bottom: 30mm; }
+.layout-panel .k-body { border-top: .35mm solid var(--ink); padding-top: 5mm; }
+.layout-panel .k-link, .layout-split .k-link { border-color: var(--ink); }
+.layout-panel .k-link-no, .layout-split .k-link-no { color: var(--ink); opacity: .55; }
+
+/* ---------- Layout: Split ---------- */
+.layout-split { background: var(--panel); color: var(--ink); }
+.layout-split .k-photo { position: absolute; top: 0; left: 0; right: 0; height: 182mm; overflow: hidden; }
+.layout-split .k-photo .k-meta { position: absolute; top: 8mm; left: 11mm; right: 11mm; color: #fff; text-shadow: 0 0 6px rgba(0,0,0,.35); }
+.layout-split .k-head { position: absolute; left: 8mm; right: 8mm; top: 150mm; z-index: 2; }
+.layout-split.title-plain .k-title { color: var(--ink); }
+.layout-split .k-cover { right: 14mm; top: 62mm; }
+.layout-split .k-sticker { right: 6mm; top: -27mm; transform: rotate(-10deg); }
+.layout-split .k-body { position: absolute; left: 11mm; right: 11mm; bottom: 11mm; align-items: start; }
+.layout-split .k-links { align-self: start; }
+
+/* ---------- Layout: Galerie ---------- */
+.layout-galerie {
+  background: var(--panel); color: var(--ink);
+  display: flex; flex-direction: column;
+  padding: 8mm 11mm 11mm;
+}
+.layout-galerie .k-head { position: relative; margin: 5mm -2mm 5mm; }
+.layout-galerie.title-plain .k-title { color: var(--ink); }
+.layout-galerie .k-sticker { right: 2mm; bottom: -24mm; transform: rotate(-12deg); width: 29mm; }
+.layout-galerie .k-grid {
+  position: relative; flex: 1; min-height: 0;
+  display: grid; gap: 2.5mm;
+  grid-template-columns: 1fr;
+  grid-auto-rows: 1fr;
+  margin-bottom: 7mm;
+}
+.layout-galerie .k-grid-1, .layout-galerie .k-grid-2, .layout-galerie .k-grid-3 { grid-template-columns: 1.7fr 1fr; }
+.layout-galerie .k-grid-1 .k-tile-main { grid-row: span 1; }
+.layout-galerie .k-grid-2 .k-tile-main { grid-row: span 2; }
+.layout-galerie .k-grid-3 .k-tile-main { grid-row: span 3; }
+.layout-galerie .k-tile { position: relative; overflow: hidden; min-height: 0; }
+.layout-galerie .k-tile .k-main { position: absolute; inset: 0; }
+.layout-galerie .k-cover { left: 8mm; bottom: 8mm; width: 40mm; height: 40mm; }
+.layout-galerie .k-link { border-color: var(--ink); }
+.layout-galerie .k-link-no { color: var(--ink); opacity: .55; }

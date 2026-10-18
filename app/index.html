@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UNGESTUEM</title>
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/kit.css">
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="brand">Ungestuem</div>
+    <div class="side-label">Artists</div>
+    <ul id="artist-list" class="artist-list"></ul>
+    <button id="add-artist" class="btn btn-ghost">+ Artist anlegen</button>
+    <details class="side-menu">
+      <summary class="btn btn-ghost">Einstellungen</summary>
+      <div class="side-menu-items">
+        <button id="settings-open">Kontakte &amp; Mail</button>
+        <button id="fonts-open">Schriften verwalten</button>
+        <button id="backup-export">Backup speichern</button>
+        <label>Backup laden<input id="backup-import" type="file" accept="application/json" hidden></label>
+      </div>
+    </details>
+  </aside>
+
+  <main class="editor">
+    <div id="empty" class="empty">
+      <h2>Noch kein Artist</h2>
+      <p>Leg links einen Artist an. Name, Links und Bilder werden gespeichert und in jedes Pressekit übernommen.</p>
+    </div>
+
+    <div id="editor-content" hidden>
+      <div class="tabs">
+        <button class="tab" data-tab="kit">Pressekit</button>
+        <button class="tab" data-tab="artist">Artist</button>
+      </div>
+
+      <!-- ===== Artist ===== -->
+      <section class="tab-panel" data-panel="artist">
+        <div class="field">
+          <label>Name</label>
+          <input data-a="name" type="text" placeholder="z. B. YELUS">
+        </div>
+        <div class="grid-2">
+          <div class="field"><label>Instagram</label><input data-a="instagram" data-url="instagram" type="text" placeholder="@handle oder Link"></div>
+          <div class="field"><label>TikTok</label><input data-a="tiktok" data-url="tiktok" type="text" placeholder="@handle oder Link"></div>
+        </div>
+        <div class="field"><label>Spotify</label><input data-a="spotify" data-url="plain" type="text" placeholder="https://open.spotify.com/artist/…"></div>
+
+        <div class="field">
+          <label>Standard-Pressetext <span class="hint">wird in neue Pressekits übernommen</span></label>
+          <textarea data-a="defaultText" rows="5"></textarea>
+        </div>
+
+        <div class="grid-3">
+          <div class="field"><label>Akzentfarbe</label><input data-a="accent" type="color"></div>
+          <div class="field"><label>Panel/Fläche</label><input data-a="panel" type="color"></div>
+          <div class="field">
+            <label>Titelschrift</label>
+            <select data-a="titleFont" data-fonts="title"></select>
+          </div>
+        </div>
+        <div class="field"><label>Textschrift</label><select data-a="bodyFont" data-fonts="body"></select></div>
+
+        <div class="field">
+          <label>Bilder <span class="hint">Pressefotos, Cover … mind. 1</span></label>
+          <label class="drop" id="drop">
+            <input id="image-input" type="file" accept="image/*" multiple hidden>
+            Bilder hierher ziehen oder klicken
+          </label>
+          <div id="pool" class="thumbs"></div>
+        </div>
+
+        <button id="delete-artist" class="btn btn-danger">Artist löschen</button>
+      </section>
+
+      <!-- ===== Pressekit ===== -->
+      <section class="tab-panel" data-panel="kit">
+        <div class="kit-bar">
+          <select id="kit-select"></select>
+          <button id="kit-new" class="btn btn-small">Neu</button>
+          <button id="kit-dup" class="btn btn-small">Duplizieren</button>
+          <button id="kit-del" class="btn btn-small btn-ghost" title="Pressekit löschen">Löschen</button>
+        </div>
+
+        <div class="field"><label>Name des Pressekits</label><input data-k="name" type="text" placeholder="z. B. CROCS oder Allgemein"></div>
+
+        <div class="field">
+          <label>Layout</label>
+          <div class="seg" id="layout-seg"></div>
+        </div>
+
+        <fieldset>
+          <legend>Release <span class="hint">optional, leer lassen für ein allgemeines EPK</span></legend>
+          <div class="grid-2">
+            <div class="field"><label>Titel</label><input data-k="releaseTitle" type="text" placeholder="CROCS"></div>
+            <div class="field"><label>VÖ-Datum</label><input data-k="releaseDate" type="date"></div>
+          </div>
+          <div class="grid-2">
+            <div class="field"><label>Zeile davor</label><input data-k="releaseLabel" type="text" placeholder="nächster release"></div>
+            <div class="field"><label>Produzent:in</label><input data-k="producer" type="text" placeholder="optional"></div>
+          </div>
+          <button id="clear-release" class="btn btn-small fieldset-btn" type="button">Release-Infos leeren (allgemeines EPK)</button>
+        </fieldset>
+
+        <div class="field">
+          <label>Pressetext <span id="word-count" class="count"></span></label>
+          <textarea data-k="text" rows="8" placeholder="50–100 Wörter. Leerzeile = neuer Absatz, **fett** für Hervorhebungen."></textarea>
+          <button id="use-default-text" class="link-btn">Standardtext des Artists übernehmen</button>
+        </div>
+
+        <div class="grid-2">
+          <div class="field"><label>Pressefotos-Link</label><input data-k="pressefotos" data-url="plain" type="text" placeholder="Dropbox, Drive …"></div>
+          <div class="field"><label>Pre-Listening-Link</label><input data-k="preListening" data-url="plain" type="text" placeholder="privater Link"></div>
+        </div>
+        <p class="hint">Spotify, Instagram und TikTok kommen automatisch vom Artist. Leere Links werden ausgeblendet.</p>
+
+        <fieldset>
+          <legend>Bilder</legend>
+          <label class="sub">Hauptbild</label>
+          <div id="main-picker" class="thumbs thumbs-pick"></div>
+          <label class="sub">Cover <span class="hint">optional, mit versetzten Rahmen</span></label>
+          <div id="cover-picker" class="thumbs thumbs-pick"></div>
+          <div id="extras-wrap">
+            <label class="sub">Zusatzbilder <span id="extras-hint" class="hint"></span></label>
+            <div id="extra-picker" class="thumbs thumbs-pick"></div>
+          </div>
+          <label class="sub">Ausschnitt anpassen</label>
+          <div class="crop-row">
+            <img id="crop-thumb" class="crop-thumb" alt="">
+            <select id="crop-target"></select>
+            <button id="crop-reset" class="link-btn" type="button">Zurücksetzen</button>
+          </div>
+          <div class="grid-3">
+            <div class="field"><label>Horizontal</label><input id="crop-x" data-crop="x" type="range" min="0" max="100"></div>
+            <div class="field"><label>Vertikal</label><input id="crop-y" data-crop="y" type="range" min="0" max="100"></div>
+            <div class="field"><label>Zoom</label><input id="crop-z" data-crop="z" type="range" min="100" max="250"></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Mail <span class="hint">für den Button „Per Mail“</span></legend>
+          <div class="field">
+            <label>Mail-Text <span class="hint">leer = Pressetext wird verwendet</span></label>
+            <textarea data-k="mailText" rows="5" placeholder="Kurzer Pitch zum Release, z. B. Mit „flieder“ blickt AYBAE zurück …"></textarea>
+          </div>
+          <div class="field">
+            <label>Vorschau</label>
+            <div id="mail-preview" class="mail-preview"></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Gestaltung</legend>
+          <div class="grid-3">
+            <div class="field"><label>Akzentfarbe</label><input data-k="accent" type="color"></div>
+            <div class="field"><label>Panel/Fläche</label><input data-k="panel" type="color"></div>
+            <div class="field">
+              <label>Titelschrift</label>
+              <select data-k="titleFont" data-fonts="title"></select>
+            </div>
+          </div>
+          <div class="field"><label>Textschrift</label><select data-k="bodyFont" data-fonts="body"></select></div>
+          <div class="checks">
+            <label><input data-k="uppercase" type="checkbox"> Titel in Großbuchstaben</label>
+            <label><input data-k="titleBreak" type="checkbox"> Titel auf zwei Zeilen</label>
+            <label><input data-k="titleAccent" type="checkbox"> Titel in Akzentfarbe</label>
+            <label><input data-k="grayscale" type="checkbox"> Hauptbild schwarz-weiß</label>
+          </div>
+          <div class="grid-2">
+            <div class="field" id="shade-field"><label>Abdunklung (Vollbild)</label><input data-k="shade" type="range" min="0" max="100"></div>
+            <div class="field"><label>Meta-Zeile links</label><input data-k="metaLeft" type="text" placeholder="pressekit"></div>
+          </div>
+          <div class="checks">
+            <label><input data-k="showSticker" type="checkbox"> Sticker anzeigen</label>
+          </div>
+          <div class="field"><label>Sticker-Text</label><input data-k="stickerText" type="text" placeholder="neue single"></div>
+        </fieldset>
+      </section>
+    </div>
+  </main>
+
+  <section class="preview">
+    <div class="preview-bar">
+      <span id="status" class="status"></span>
+      <button id="mail" class="btn">Per Mail</button>
+      <button id="export" class="btn btn-primary">PDF exportieren</button>
+    </div>
+    <div class="stage" id="stage">
+      <div class="scaler" id="scaler"><div id="page" class="page"></div></div>
+    </div>
+  </section>
+</div>
+
+<dialog id="fonts-dialog" class="dialog">
+  <h3>Eigene Schriften</h3>
+  <p class="hint">.otf, .ttf, .woff oder .woff2 hochladen. Danach stehen sie in allen Schrift-Menüs zur Verfügung.
+    Für Titel am besten den Bold-Schnitt hochladen.</p>
+  <label class="drop" id="font-drop">
+    <input id="font-input" type="file" accept=".otf,.ttf,.woff,.woff2" multiple hidden>
+    Schriftdateien hierher ziehen oder klicken
+  </label>
+  <ul id="font-list" class="font-list"></ul>
+  <div class="dialog-foot"><button id="fonts-close" class="btn">Fertig</button></div>
+</dialog>
+
+<dialog id="settings-dialog" class="dialog dialog-wide">
+  <h3>Einstellungen</h3>
+  <div class="field">
+    <label>Ansprechpartner:innen (BCC) <span id="contacts-count" class="count"></span></label>
+    <textarea id="set-contacts" rows="8" placeholder="Eine Adresse pro Zeile"></textarea>
+    <span class="hint">Eine Adresse pro Zeile (Komma oder Semikolon gehen auch).</span>
+  </div>
+  <div class="field">
+    <label>Betreff</label>
+    <input id="set-subject" type="text">
+  </div>
+  <div class="field">
+    <label>Mail-Vorlage</label>
+    <textarea id="set-template" rows="8"></textarea>
+    <span class="hint">Platzhalter: {mailtext} {artist} {titel} {datum} {vö} {prelistening} {pressefotos} {spotify} {instagram} {tiktok} {signatur}.
+      Zeilen mit leerem Platzhalter werden weggelassen.</span>
+  </div>
+  <div class="field">
+    <label>Signatur</label>
+    <textarea id="set-signature" rows="5"></textarea>
+  </div>
+  <div class="dialog-foot"><button id="settings-close" class="btn btn-primary">Speichern</button></div>
+</dialog>
+
+<script src="js/db.js"></script>
+<script src="js/kit.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
